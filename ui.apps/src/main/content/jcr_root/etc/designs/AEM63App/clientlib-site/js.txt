@@ -1,2 +1,4 @@
 #base=js
-script.js
+_gbly.js
+be.js
+common/common.js
