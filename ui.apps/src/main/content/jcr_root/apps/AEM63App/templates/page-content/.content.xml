@@ -26,5 +26,8 @@
                 text="&lt;p>This is a content page&lt;/p>"
                 textIsRich="true"/>
         </par>
+        <footer
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="AEM63App/components/structure/footer"/>
     </jcr:content>
 </jcr:root>

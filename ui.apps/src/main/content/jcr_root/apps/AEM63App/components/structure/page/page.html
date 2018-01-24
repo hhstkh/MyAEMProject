@@ -13,22 +13,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */-->
-<div class="page__main" data-sly-use.main="main.js">
-    <header class="page__header">
-        <div class="page__logo" data-sly-resource="logo"></div>
-        <nav class="page__topnav" data-sly-resource="topnav"></nav>
-    </header>
-
-    <div class="page__title" data-sly-resource="${'title' @ decorationTagName='div'}"></div>
-    <div class="page__par" data-sly-resource="par"></div>
-</div>
-
-<!-- FOOTER -->
-<div class="container-fluid footer">
-    <div class="row">
-		<div class="container">
-            <sly data-sly-resource="footer" data-sly-unwrap />
-       	</div>
-	</div>
-</div>
-<!-- /FOOTER -->
+<!doctype html>
+<html lang="en">
+    <head>
+        <sly data-sly-include="partials/head.html" data-sly-unwrap/>
+        <sly data-sly-include="partials/headlibs.html" data-sly-unwrap/>
+    </head>
+    <body class="page">
+        <sly data-sly-include="partials/main.html" data-sly-unwrap/>
+        <sly data-sly-include="partials/footlibs.html" data-sly-unwrap/>
+    </body>
+</html>
