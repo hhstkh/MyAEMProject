@@ -1,2 +1,6 @@
 #base=css
+animate.css
+animation.css
+bootstrap.min.css
+font-awesome.css
 style.css
