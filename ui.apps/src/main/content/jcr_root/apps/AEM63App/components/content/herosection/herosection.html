@@ -1,0 +1,23 @@
+<!--Hero_Section-->
+<h3 style="color:red;" data-sly-test="${wcmmode.edit}">Hero Component</h3>
+<sly data-sly-use.pojoUtil="${'com.aem.community.core.models.PojoUtil' @ path=properties.readMoreLink, req=request}"/>
+<section id="hero_section" class="top_cont_outer" style="background-color: ${properties.backgroundColor @ context='styleString'};">
+  <div class="hero_wrapper">
+    <div class="container">
+      <div class="hero_section">
+        <div class="row">
+          <div class="col-lg-5 col-sm-7">
+            <div class="top_left_cont zoomIn wow animated"> 
+              <h2>${properties.title}</h2>
+              <p>${properties.summary}</p>
+              <a href="${pojoUtil.url}" class="read_more2">${properties.readMoreLabel}</a> </div>
+          </div>
+          <div class="col-lg-7 col-sm-5">
+			<img src="${properties.heroImg}" class="zoomIn wow animated" alt="" />
+		  </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--Hero_Section--> 

@@ -1,1 +1,8 @@
 Click here to configure Multi Field User Menu
+<div data-sly-use.menus="com.aem.community.core.models.MultiFieldComponent">
+	<div data-sly-list.menu="${menus.submenuItems}">
+		<p>Title: ${menu.title}</p>
+		<p>Link: ${menu.link}</p>
+		<p>Flag: ${menu.flag}</p>
+	</div>
+</div>
