@@ -1,2 +1,2 @@
-#base=css
+#base=js
 style.css
