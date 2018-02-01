@@ -1,9 +1,24 @@
-//Use JQuery AJAX request to post data to a Sling Servlet
-$.ajax({
-type: 'POST', 
-url:'/bin/myImportJob',
-data:'id='+ claimId+'&firstName='+ myFirst+'&lastName='+ myLast+'&address='+ address+'&cat='+ cat+'&state='+ state+'&details='+ details+'&date='+ date+'&city='+ city,
-success: function(msg){
-    alert(msg); //display the data returned by the servlet
-}
-});
+$(function() {
+	//Use JQuery AJAX request to post data to a Sling Servlet
+	var form = $("#importForm");
+	
+	$(form).submit(function(e) {
+		e.preventDefault();
+		var formData = new FormData(this);
+		$.ajax({
+			type : 'POST',
+			enctype: 'multipart/form-data',
+			processData: false,
+			url : '/bin/myImportJob',
+			data: formData,
+			success: function(msg) {
+				console.log(msg); // display the data returned by the servlet
+			},
+			error: function (msg) {
+				console.log(msg);
+			}
+		});
+	})
+})
+
+

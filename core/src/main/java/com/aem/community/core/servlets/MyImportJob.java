@@ -1,13 +1,18 @@
 package com.aem.community.core.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.util.Streams;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.request.RequestParameter;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.osgi.framework.Constants;
@@ -25,13 +30,28 @@ public class MyImportJob extends SlingAllMethodsServlet {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	
 	@Override
-	protected void doPost(SlingHttpServletRequest request,
+	public void doPost(SlingHttpServletRequest request,
 			SlingHttpServletResponse response) throws ServletException,
 			IOException {
-		// TODO Auto-generated method stub
 		
-		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+		PrintWriter out = response.getWriter();
+		String name = request.getParameter("name");
+		final Map<String, RequestParameter[]> params = request.getRequestParameterMap();
 		
-		super.doPost(request, response);
+		for (final Map.Entry<String, RequestParameter[]> keyValue : params.entrySet()) {
+			String key = keyValue.getKey();
+			RequestParameter[] paraArr = keyValue.getValue();
+			RequestParameter para = paraArr != null ? paraArr[0] : null;
+			if (para != null) {
+				InputStream inputStream = para.getInputStream();
+				
+				if (para.isFormField()) {
+					out.println("Form field " + key + " with value " + Streams.asString(inputStream) + " detected.");
+				} else {
+					out.println("File field " + key + " with file name " + para.getFileName() + " detected.");
+				}
+			}
+		}
+		
 	}
 }
