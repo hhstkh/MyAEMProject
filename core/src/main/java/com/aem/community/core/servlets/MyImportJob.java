@@ -1,15 +1,17 @@
 package com.aem.community.core.servlets;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.InputStreamReader;
 import java.util.Map;
 
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.util.Streams;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.request.RequestParameter;
@@ -27,6 +29,7 @@ property={
         "sling.servlet.paths="+ "/bin/myImportJob"
 })
 public class MyImportJob extends SlingAllMethodsServlet {
+	
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	
 	@Override
@@ -34,24 +37,67 @@ public class MyImportJob extends SlingAllMethodsServlet {
 			SlingHttpServletResponse response) throws ServletException,
 			IOException {
 		
-		PrintWriter out = response.getWriter();
-		String name = request.getParameter("name");
-		final Map<String, RequestParameter[]> params = request.getRequestParameterMap();
+		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 		
-		for (final Map.Entry<String, RequestParameter[]> keyValue : params.entrySet()) {
-			String key = keyValue.getKey();
-			RequestParameter[] paraArr = keyValue.getValue();
-			RequestParameter para = paraArr != null ? paraArr[0] : null;
-			if (para != null) {
-				InputStream inputStream = para.getInputStream();
-				
-				if (para.isFormField()) {
-					out.println("Form field " + key + " with value " + Streams.asString(inputStream) + " detected.");
-				} else {
-					out.println("File field " + key + " with file name " + para.getFileName() + " detected.");
+		if (isMultipart) {
+			final Map<String, RequestParameter[]> params = request.getRequestParameterMap();
+			
+			String path = "/content/AEM63App/admin";
+			Node rootNode = null;
+			for (final Map.Entry<String, RequestParameter[]> keyValue : params.entrySet()) {
+				String key = keyValue.getKey();
+				RequestParameter[] paraArr = keyValue.getValue();
+				RequestParameter para = paraArr != null ? paraArr[0] : null;
+				if (para != null) {
+					InputStream inputStream = para.getInputStream();
+					
+					if (para.isFormField()) {
+						if (para.getName() == "path") {
+							path = para.getString();
+						}
+					} else {
+						rootNode = request.getResourceResolver().resolve(request, path).adaptTo(Node.class);
+						processFileToNode(inputStream, rootNode);
+					}
 				}
 			}
 		}
-		
+	}
+
+	private void processFileToNode(InputStream inputStream, Node rootNode) {
+		try {
+			BufferedReader bufferReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+			
+			String lineContent = "";
+			while ((lineContent = bufferReader.readLine()) != null) {
+				saveAdminNode(lineContent, rootNode);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void saveAdminNode(String nodeName, Node rootNode) {
+		Node n = null;
+		try {
+			if (rootNode.hasNode(nodeName)) {
+				
+			} else {
+				n = rootNode.addNode(nodeName, "cq:Page");
+				rootNode.getSession().save();
+				
+				Node contentNode = n.addNode("jcr:content", "cq:PageContent");
+				n.getSession().save();
+
+				contentNode.setProperty("cq:tempplate", "/apps/AEM63App/templates/admin");
+				contentNode.setProperty("sling:resourceType", "AEM63App/components/structure/admin-page");
+				contentNode.setProperty("jcr:title", nodeName);
+				contentNode.getSession().save();
+			}
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 	}
 }

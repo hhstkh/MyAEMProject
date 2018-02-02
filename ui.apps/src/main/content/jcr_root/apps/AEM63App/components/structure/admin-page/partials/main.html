@@ -17,13 +17,12 @@
     <header id="header_wrapper">
     	<div class="container">
     		<div class="header_box">
-    			 <div class="logo" data-sly-resource="logo"></div>
+    			 <div class="logo" data-sly-resource="${@path='par_logo', resourceType='/apps/AEM63App/components/structure/logo'}"></div>
     		</div>
     	</div>
        
     </header>
 
-    <div class="page__title" data-sly-resource="${'title' @ decorationTagName='div'}"></div>
-    <div class="page__par" data-sly-resource="par"></div>
-
+    <div class="page__title" data-sly-resource="${@path='par_title', resourceType='/apps/AEM63App/components/content/title'}"></div>
+    <div class="page__par" data-sly-resource="${@path='par_parsys', resourceType='wcm/foundation/components/parsys'}"></div>
 </div>
