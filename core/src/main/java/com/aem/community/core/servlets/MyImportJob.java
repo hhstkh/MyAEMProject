@@ -36,9 +36,10 @@ public class MyImportJob extends SlingAllMethodsServlet {
 	public void doPost(SlingHttpServletRequest request,
 			SlingHttpServletResponse response) throws ServletException,
 			IOException {
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
 		
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-		
 		if (isMultipart) {
 			final Map<String, RequestParameter[]> params = request.getRequestParameterMap();
 			
@@ -73,7 +74,6 @@ public class MyImportJob extends SlingAllMethodsServlet {
 				saveAdminNode(lineContent, rootNode);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -96,7 +96,6 @@ public class MyImportJob extends SlingAllMethodsServlet {
 				contentNode.getSession().save();
 			}
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 	}
