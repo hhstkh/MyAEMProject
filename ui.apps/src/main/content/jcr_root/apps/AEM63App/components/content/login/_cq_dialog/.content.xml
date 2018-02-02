@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Login Properties"
+    sling:resourceType="cq/gui/components/authoring/dialog">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/foundation/container">
+        <layout
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/foundation/layouts/tabs" type="nav"/>
+        <items jcr:primaryType="nt:unstructured">
+            <herotext
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/foundation/section"
+                jcr:title="Hero Text Properties"
+                name="./herotext">
+                <layout
+		            jcr:primaryType="nt:unstructured"
+		            sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"/>
+		        <items jcr:primaryType="nt:unstructured">
+		        	<column jcr:primaryType="nt:unstructured"
+		        			sling:resourceType="granite/ui/components/foundation/container">
+		        			<items jcr:primaryType="nt:unstructured">
+		        				<title jcr:primaryType="nt:unstructured"
+		        					   fieldLabel="Enter Page title"
+		        					   fieldTitle="Title"
+		        					   name="./title"
+		        					   sling:resourceType="granite/ui/components/foundation/form/textfield"/>
+		        				<subheading jcr:primaryType="nt:unstructured"
+		        					   fieldLabel="Enter Page Title Sub Heading"
+		        					   name="./subheading"
+		        					   sling:resourceType="granite/ui/components/foundation/form/textfield"/>
+		        				<alt jcr:primaryType="nt:unstructured"
+		        					   fieldLabel="Text Alt"
+		        					   name="./alt"
+		        					   sling:resourceType="granite/ui/components/foundation/form/textfield"/>
+		        				<file jcr:primaryType="nt:unstructured"
+		        					   fieldLabel="Logo"
+		        					   name="./file"
+		        					   sling:resourceType="granite/ui/components/foundation/form/textfield"/>
+		        			</items>
+		        	</column>
+		        </items>
+            </herotext>
+        </items>
+    </content>
+</jcr:root>
