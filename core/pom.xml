@@ -128,5 +128,11 @@
 			<version>1.3.2</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.day.commons</groupId>
+			<artifactId>day.commons.datasource.poolservice</artifactId>
+			<version>1.0.10</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>
