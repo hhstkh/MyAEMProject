@@ -2,6 +2,7 @@ $(function() {
 	//Use JQuery AJAX request to post data to a Sling Servlet
 	var form = $("#searchForm");
 
+	/*
 	$(form).submit(function(e) {
 		e.preventDefault();
 		var formData = new FormData(this);
@@ -17,4 +18,5 @@ $(function() {
 			}
 		});
 	})
+	*/
 })
