@@ -9,7 +9,8 @@ import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
 
-@Model(adaptables = {Resource.class, SlingHttpServletRequest.class }, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
+@Model(adaptables = Resource.class)
+//@Model(adaptables = {Resource.class, SlingHttpServletRequest.class }, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class SearchResponse {
 	
 	@Inject
@@ -22,7 +23,7 @@ public class SearchResponse {
 	@Named("jcr:content/jcr:description")
 	private String content;
 	
-	private String href;
+	//private String href;
 
 	public String getTitle() {
 		return title;
@@ -40,11 +41,11 @@ public class SearchResponse {
 		this.content = content;
 	}
 
-	public String getHref() {
+	/*public String getHref() {
 		return href;
 	}
 
 	public void setHref(String href) {
 		this.href = href;
-	}
+	}*/
 }

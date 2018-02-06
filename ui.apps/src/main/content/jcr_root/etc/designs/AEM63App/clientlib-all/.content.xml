@@ -2,4 +2,5 @@
 <jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
     jcr:primaryType="cq:ClientLibraryFolder"
     categories="[AEM63App.all]"
-    embed="[AEM63App.site,AEM63App.page,AEM63App.topnav,AEM63App.colctrl,AEM63App.textimage, AEM63App.importdata, AEM63App.login]"/>
+    embed="[AEM63App.site,AEM63App.page,AEM63App.topnav,AEM63App.colctrl,
+    AEM63App.textimage, AEM63App.importdata, AEM63App.login, AEM63App.countryForm]"/>

@@ -17,6 +17,7 @@ import com.aem.community.service.SearchService;
 import com.aem.community.service.impl.SearchServiceImpl;
 import com.day.cq.search.result.Hit;
 import com.day.cq.search.result.SearchResult;
+import com.day.cq.wcm.api.Page;
 
 public class SearchComponent extends WCMUsePojo {
 	
@@ -89,17 +90,16 @@ public class SearchComponent extends WCMUsePojo {
 
 	private void convertToSearchResponse(SearchResult searchResultPerPage, SlingHttpServletRequest request) {
 		if (searchResultPerPage != null) {
-			List<Hit> hits = searchResultPerPage.getHits();
 			searchResponses = new ArrayList<SearchResponse>();
-			for (Hit hit : hits) {
+			for (Hit hit : searchResultPerPage.getHits()) {
 				try {
 					Resource resource = hit.getResource();
 					if (resource != null) {
 						/*SearchResponse searchResponse = new SearchResponse();
 						searchResponse.setTitle(hit.getTitle());*/
-						
-						SearchResponse searchResponse = (SearchResponse) resource.adaptTo(SearchResponse.class);
-						searchResponse.setHref(request.getResourceResolver().map(hit.getPath()) + ".html");
+						//Page searchResponse = (Page) resource.adaptTo(Page.class);
+						SearchResponse searchResponse = resource.adaptTo(SearchResponse.class);
+						//searchResponse.setHref(request.getResourceResolver().map(hit.getPath()) + ".html");
 						searchResponses.add(searchResponse);
 					}
 				} catch (RepositoryException e) {
