@@ -1,0 +1,11 @@
+# name of the dispatcher
+/name "myaem.com.vn"
+
+# each farm configures a set of (load-balanced) renders
+/farms
+  {
+        $include "myaem.author-farm.any"
+
+        $include "myaem.publish-farm.any"
+
+  }

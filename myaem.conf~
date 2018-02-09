@@ -1,0 +1,112 @@
+# Project Solutions - myaem.com.vn
+#
+
+Include /etc/apache2/conf-enabled/myaem.dispatcher.conf
+        
+<VirtualHost *:80>
+
+    ServerName myaem.com.vn
+
+    DocumentRoot /var/www/html/myaem
+    ErrorLog "/var/log/apache2/myaem.com.vn.log"
+
+    # Force host header to server name expected by Sling mappings in AEM
+    RequestHeader set Host myaem.com.vn
+
+
+    <IfModule disp_apache2.c>
+        DispatcherPassError 1
+    </IfModule>
+
+    ErrorDocument 404 /content/AEM63App/404.html
+    ErrorDocument 500 /content/AEM63App/500.html
+
+    <IfModule mod_rewrite.c>
+    
+        RewriteEngine on
+        
+        # Apache 2.2
+        # RewriteLog /var/log/apache2/myaem.com.vn.log
+        # RewriteLogLevel 3
+        
+        # Apache 2.4
+        LogLevel alert rewrite:trace3
+
+        # redirect to https
+        # RewriteCond %{HTTP:X-Forwarded-Proto} !https
+        # RewriteCond %{REQUEST_URI} !^/dispatcher/invalidate.cache
+        # RewriteRule !/eagle/check\.sh https://%{SERVER_NAME}%{REQUEST_URI} [L,R]
+
+	# Options +FollowSymLinks
+
+	# RewriteRule ^/content/AEM63App/en/(.*)$ http://myaem.com.vn/$1 [R=301,L]
+
+	# RewriteRule ^/?$ http://myaem.com.vn/? [R=301,L]
+
+        # url mapping...
+
+        # home page redirect
+        RewriteRule ^/$ /content/AEM63App/en.html [PT,L]
+
+	# RewriteCond %{REQUEST_URI} /
+	# RewriteRule ^$ /en.html [L]
+
+        # solutions content
+        RewriteCond %{REQUEST_URI} !^/system/sling/logout.html
+        RewriteCond %{REQUEST_URI} !^/content/AEM63App
+        RewriteRule ^/(.*)\.html$  /content/AEM63App/$1.html [PT,L,QSA,NE]
+        RewriteRule ^/(.*)/$  /content/AEM63App/$1.html [PT,L,QSA,NE]
+
+    </IfModule>
+    
+
+    # Prevent HTTP Basic Auth header from reaching AEM
+    RequestHeader unset Authorization
+
+    # Clickjacking defense
+    Header always append X-Frame-Options SAMEORIGIN
+
+    # Make sure proxies don't deliver the wrong content
+    Header append Vary User-Agent env=!dont-vary
+
+    # Disable browser mime type sniffing
+    Header set X-Content-Type-Options nosniff
+
+    <Directory /var/www/html/myaem>
+        
+        # Include /etc/httpd/conf.d/myaem.whitelist
+    
+        # Prevent HTTP verb tampering
+        <LimitExcept GET POST OPTIONS>
+            deny from all
+        </LimitExcept>
+
+        # RewriteEngine On
+        # RewriteCond %{REQUEST_METHOD} !^(GET|POST|HEAD)
+        # RewriteRule .* - [R=405,L]
+    
+        # CORS config
+        SetEnvIfNoCase Origin "^http(s)?://(.+\.)?(myaem\.com\.vn)$" AccessControlAllowOrigin=$0
+        Header always set Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+
+        <IfModule disp_apache2.c>
+            ModMimeUsePathInfo On
+            SetHandler dispatcher-handler
+        </IfModule>
+
+        Options FollowSymLinks
+        AllowOverride None
+
+        # Insert filter
+        SetOutputFilter DEFLATE
+
+        # Don't compress images
+        SetEnvIfNoCase Request_URI \
+        \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+
+    </Directory>
+
+
+    
+</VirtualHost>
+
