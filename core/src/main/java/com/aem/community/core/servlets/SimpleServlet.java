@@ -15,6 +15,7 @@
  */
 package com.aem.community.core.servlets;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
@@ -25,9 +26,16 @@ import org.apache.sling.api.resource.ValueMap;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
 
+import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.Property;
+import javax.jcr.RepositoryException;
+import javax.jcr.Value;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
+
 import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * Servlet that writes some sample content into the response. It is mounted for
@@ -40,7 +48,7 @@ import java.io.IOException;
                    Constants.SERVICE_DESCRIPTION + "=Simple Demo Servlet",
                    "sling.servlet.methods=" + HttpConstants.METHOD_GET,
                    "sling.servlet.resourceTypes="+ "AEM63App/components/structure/page",
-                   "sling.servlet.extensions=" + "txt"
+                   "sling.servlet.extensions=" + ".txt"
            })
 public class SimpleServlet extends SlingSafeMethodsServlet {
 
@@ -50,6 +58,26 @@ public class SimpleServlet extends SlingSafeMethodsServlet {
     protected void doGet(final SlingHttpServletRequest req,
             final SlingHttpServletResponse resp) throws ServletException, IOException {
         final Resource resource = req.getResource();
+        Iterator<Resource> it = resource.getChild("par").listChildren();
+        while(it.hasNext()) {
+        	Node childNode = it.next().adaptTo(Node.class);
+        	try {
+				Property property = childNode.getProperty("sling:resourceType");
+				if (property != null && StringUtils.equals(property.getString(), "AEM63App/components/content/services")) {
+					resp.getWriter().write("Services = " + childNode.getProperty("description").getString());
+					Value[] values = childNode.getProperty("title").getValues();
+					for (Value val : values) {
+						resp.getWriter().write("_________" + val.getString());
+					}
+				}
+			} catch (PathNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (RepositoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
         resp.setContentType("text/plain");
         resp.getWriter().write("Title = " + resource.adaptTo(ValueMap.class).get("jcr:title"));
     }

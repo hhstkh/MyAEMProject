@@ -13,15 +13,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package apps.sling.servlet.errorhandler;
 
-import com.adobe.cq.sightly.WCMUsePojo;
+// Server-side JavaScript for the main.html logic
+use(function () {
+    var Calendar = Packages.java.util.Calendar;
+    var currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
-public class ResponseStatus extends WCMUsePojo {
-    
-    @Override
-    public void activate() throws Exception {
-        getResponse().setStatus(404);
-        getResponse().setContentType("text/html");
-    }
-}
+    return {
+        year: currentYear
+    };
+});
